@@ -189,66 +189,6 @@ textarea::placeholder { color: var(--muted2); }
   transform: none;
 }
 
-/* ── WHEEL SECTION ── */
-.wheel-section {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
-  margin-bottom: 48px;
-}
-.wheel-section.visible {
-  display: flex;
-}
-
-.wheel-container {
-  position: relative;
-  width: 460px;
-  height: 460px;
-}
-
-#wheel {
-  display: block;
-  width: 460px;
-  height: 460px;
-  filter: drop-shadow(0 8px 32px rgba(0,0,0,0.5));
-}
-
-.wheel-pointer {
-  position: absolute;
-  top: -18px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 18px solid transparent;
-  border-right: 18px solid transparent;
-  border-top: 36px solid var(--red);
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
-  z-index: 10;
-}
-
-.btn-spin {
-  padding: 16px 56px;
-  background: var(--text);
-  color: var(--bg);
-  border: none;
-  border-radius: 2px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.btn-spin:hover { background: var(--red); color: white; }
-.btn-spin:disabled {
-  background: var(--muted2);
-  color: var(--muted);
-  cursor: not-allowed;
-}
-
 /* ── RESULT ── */
 .result-section {
   display: none;
@@ -380,7 +320,6 @@ textarea::placeholder { color: var(--muted2); }
   header { padding: 16px 20px; }
   .intro { flex-direction: column; gap: 16px; }
   .intro-bar { width: 100%; height: 4px; }
-  .wheel-container, #wheel { width: 320px; height: 320px; }
   .result-name { font-size: 36px; }
   .all-names-list { grid-template-columns: 1fr; }
   .header-meta { display: none; }
@@ -399,7 +338,7 @@ textarea::placeholder { color: var(--muted2); }
     <div class="intro-bar"></div>
     <div class="intro-text">
       <h1>Trouvez le nom de votre projet</h1>
-      <p>Décrivez votre projet en quelques phrases, lancez la roue et découvrez des propositions de noms percutants, inspirés du style IHECS : jeux de mots, détournements d'expressions, portmanteaux et punchlines journalistiques.</p>
+      <p>Décrivez votre projet en quelques phrases et découvrez des propositions de noms percutants, inspirés du style IHECS : jeux de mots, détournements d'expressions, portmanteaux et punchlines journalistiques.</p>
     </div>
   </div>
 
@@ -419,23 +358,13 @@ textarea::placeholder { color: var(--muted2); }
     </div>
   </div>
 
-  <!-- ── WHEEL ── -->
-  <div class="wheel-section" id="wheel-section">
-    <div class="wheel-container">
-      <div class="wheel-pointer"></div>
-      <canvas id="wheel" width="920" height="920"></canvas>
-    </div>
-    <button class="btn-spin" id="btn-spin" onclick="spinWheel()">Lancer la roue</button>
-  </div>
-
   <!-- ── RESULT ── -->
   <div class="result-section" id="result-section">
-    <div class="result-label">✦ Le nom de votre projet ✦</div>
+    <div class="result-label">✦ Nom sélectionné ✦</div>
     <div class="result-name" id="result-name"></div>
     <div class="result-actions">
       <button class="btn-action" onclick="copyName()">📋 Copier</button>
-      <button class="btn-action" onclick="spinWheel()">⟳ Relancer la roue</button>
-      <button class="btn-action" onclick="generate()">♻ Nouveaux noms</button>
+      <button class="btn-action" onclick="generate()">⟳ Nouveaux noms</button>
     </div>
   </div>
 
@@ -734,129 +663,9 @@ function generateNames(description) {
 }
 
 // ══════════════════════════════════════════
-// WHEEL RENDERING & ANIMATION
+// MAIN FLOW
 // ══════════════════════════════════════════
-const WHEEL_COLORS = [
-  '#CC1122', '#1a1a2e', '#2b2d42', '#0f3460',
-  '#533483', '#16213e', '#8b1a1a', '#2a2a3e'
-];
-
 let currentNames = [];
-let wheelAngle = 0;
-let spinning = false;
-let wheelAnimId = null;
-
-function drawWheel(names, angle) {
-  const canvas = document.getElementById('wheel');
-  const ctx = canvas.getContext('2d');
-  const size = canvas.width;
-  const cx = size / 2, cy = size / 2, r = size / 2 - 10;
-  const segAngle = (2 * Math.PI) / names.length;
-
-  ctx.clearRect(0, 0, size, size);
-
-  // Draw segments
-  names.forEach((name, i) => {
-    const startA = angle + i * segAngle;
-    const endA = startA + segAngle;
-
-    // Segment fill
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.arc(cx, cy, r, startA, endA);
-    ctx.closePath();
-    ctx.fillStyle = WHEEL_COLORS[i % WHEEL_COLORS.length];
-    ctx.fill();
-
-    // Segment border
-    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Text
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(startA + segAngle / 2);
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#ffffff';
-
-    // Fit text
-    let fontSize = 28;
-    ctx.font = `bold ${fontSize}px "Barlow Condensed", sans-serif`;
-    while (ctx.measureText(name).width > r - 80 && fontSize > 14) {
-      fontSize -= 2;
-      ctx.font = `bold ${fontSize}px "Barlow Condensed", sans-serif`;
-    }
-    ctx.fillText(name, r - 30, 0);
-    ctx.restore();
-  });
-
-  // Center circle
-  ctx.beginPath();
-  ctx.arc(cx, cy, 44, 0, 2 * Math.PI);
-  ctx.fillStyle = '#0d0d0d';
-  ctx.fill();
-  ctx.strokeStyle = '#CC1122';
-  ctx.lineWidth = 4;
-  ctx.stroke();
-
-  // Center dot
-  ctx.beginPath();
-  ctx.arc(cx, cy, 8, 0, 2 * Math.PI);
-  ctx.fillStyle = '#CC1122';
-  ctx.fill();
-}
-
-function getWinnerIndex(names, angle) {
-  const segAngle = (2 * Math.PI) / names.length;
-  // The pointer is at the top (angle = -PI/2 or 3PI/2)
-  const pointerAngle = -Math.PI / 2;
-  // Normalize angle
-  let normalizedPointer = (pointerAngle - angle) % (2 * Math.PI);
-  if (normalizedPointer < 0) normalizedPointer += 2 * Math.PI;
-  return Math.floor(normalizedPointer / segAngle) % names.length;
-}
-
-function spinWheel() {
-  if (spinning || currentNames.length === 0) return;
-  spinning = true;
-
-  document.getElementById('btn-spin').disabled = true;
-  document.getElementById('result-section').classList.remove('visible');
-
-  // Random spin: 4-8 full rotations + random offset
-  const totalRotation = (4 + Math.random() * 4) * 2 * Math.PI + Math.random() * 2 * Math.PI;
-  const startAngle = wheelAngle;
-  const targetAngle = startAngle + totalRotation;
-  const duration = 4000 + Math.random() * 2000; // 4-6 seconds
-  const startTime = performance.now();
-
-  function animate(now) {
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-
-    // Cubic ease-out for natural deceleration
-    const eased = 1 - Math.pow(1 - progress, 3);
-    wheelAngle = startAngle + totalRotation * eased;
-
-    drawWheel(currentNames, wheelAngle);
-
-    if (progress < 1) {
-      wheelAnimId = requestAnimationFrame(animate);
-    } else {
-      spinning = false;
-      document.getElementById('btn-spin').disabled = false;
-
-      // Show result
-      const winnerIdx = getWinnerIndex(currentNames, wheelAngle);
-      const winnerName = currentNames[winnerIdx];
-      showResult(winnerName);
-    }
-  }
-
-  wheelAnimId = requestAnimationFrame(animate);
-}
 
 function showResult(name) {
   const section = document.getElementById('result-section');
@@ -875,9 +684,6 @@ function showResult(name) {
   });
 }
 
-// ══════════════════════════════════════════
-// MAIN FLOW
-// ══════════════════════════════════════════
 function generate() {
   const desc = document.getElementById('description').value.trim();
   if (!desc) {
@@ -888,14 +694,6 @@ function generate() {
   // Generate names
   currentNames = generateNames(desc);
 
-  // Show wheel
-  const wheelSection = document.getElementById('wheel-section');
-  wheelSection.classList.add('visible');
-
-  // Reset
-  wheelAngle = Math.random() * 2 * Math.PI;
-  drawWheel(currentNames, wheelAngle);
-
   // Show all names list
   const allNames = document.getElementById('all-names');
   const list = document.getElementById('all-names-list');
@@ -904,11 +702,11 @@ function generate() {
   ).join('');
   allNames.classList.add('visible');
 
-  // Hide result
+  // Hide previous result
   document.getElementById('result-section').classList.remove('visible');
 
-  // Scroll to wheel
-  wheelSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  // Scroll to names
+  allNames.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function selectName(chip, name) {
