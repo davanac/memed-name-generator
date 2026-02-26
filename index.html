@@ -5,56 +5,60 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MéMéd — Générateur de noms de projets IHECS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;800&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --red: #CC1122;
-  --red-dark: #aa0d1c;
-  --bg: #0d0d0d;
-  --surface: #161616;
-  --surface2: #1e1e1e;
-  --border: #2a2a2a;
-  --text: #f0ede8;
-  --muted: #777;
-  --muted2: #444;
+  --ihecs: #0083A9;
+  --ihecs-light: #00ADD0;
+  --ihecs-dark: #006778;
+  --bg: #ffffff;
+  --surface: #f5f7f8;
+  --surface2: #eef1f3;
+  --border: #d4dbe0;
+  --text: #2c2c2c;
+  --muted: #4D4F53;
+  --muted2: #8B8D8E;
+  --accent-warm: #FFA200;
+  --accent-green: #69BE28;
+  --accent-magenta: #C4014B;
 }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Barlow', sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   min-height: 100vh;
   line-height: 1.5;
 }
 
 /* ── HEADER ── */
 header {
-  border-bottom: 1px solid var(--border);
+  border-bottom: 3px solid var(--ihecs);
   padding: 20px 48px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: sticky;
   top: 0;
-  background: rgba(13,13,13,0.95);
+  background: rgba(255,255,255,0.97);
   backdrop-filter: blur(8px);
   z-index: 100;
 }
 
 .logo {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
+  font-family: 'Fjalla One', sans-serif;
+  font-size: 24px;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+  color: var(--text);
 }
-.logo em { color: var(--red); font-style: normal; }
+.logo em { color: var(--ihecs); font-style: normal; }
 
 .header-meta {
   font-size: 12px;
-  color: var(--muted);
+  color: var(--muted2);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -73,53 +77,53 @@ main {
   align-items: flex-start;
   gap: 32px;
 }
-.intro-bar { width: 4px; background: var(--red); flex-shrink: 0; align-self: stretch; }
+.intro-bar { width: 4px; background: var(--ihecs); flex-shrink: 0; align-self: stretch; border-radius: 2px; }
 .intro-text h1 {
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Fjalla One', sans-serif;
   font-size: 38px;
-  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   line-height: 1.1;
   margin-bottom: 10px;
+  color: var(--ihecs-dark);
 }
-.intro-text p { color: var(--muted); font-size: 14px; max-width: 660px; }
+.intro-text p { color: var(--muted); font-size: 15px; max-width: 660px; }
 
 /* ── INPUT SECTION ── */
 .input-section {
   margin-bottom: 48px;
   border: 1px solid var(--border);
-  border-radius: 3px;
+  border-radius: 4px;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 
 .input-header {
-  background: var(--surface);
+  background: var(--ihecs);
   padding: 18px 32px;
-  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
 .input-pill {
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Fjalla One', sans-serif;
   font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--red);
-  border: 1px solid var(--red);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.5);
   padding: 5px 14px;
   white-space: nowrap;
+  border-radius: 2px;
 }
 
 .input-title {
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Fjalla One', sans-serif;
   font-size: 20px;
-  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
+  color: #fff;
 }
 
 .input-body { padding: 32px; }
@@ -136,28 +140,30 @@ label {
 
 textarea {
   width: 100%;
-  background: var(--surface2);
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 2px;
+  border-radius: 4px;
   color: var(--text);
-  font-family: 'Barlow', sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
   padding: 16px;
   resize: vertical;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
   line-height: 1.6;
   min-height: 120px;
 }
 textarea:focus {
   outline: none;
-  border-color: var(--red);
+  border-color: var(--ihecs);
+  box-shadow: 0 0 0 3px rgba(0,131,169,0.12);
 }
 textarea::placeholder { color: var(--muted2); }
 
 .hint {
   margin-top: 8px;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted2);
+  font-family: 'Lora', serif;
   font-style: italic;
 }
 
@@ -169,19 +175,18 @@ textarea::placeholder { color: var(--muted2); }
   width: 100%;
   margin-top: 24px;
   padding: 18px 40px;
-  background: var(--red);
+  background: var(--ihecs);
   color: white;
   border: none;
-  border-radius: 2px;
-  font-family: 'Barlow Condensed', sans-serif;
+  border-radius: 4px;
+  font-family: 'Fjalla One', sans-serif;
   font-size: 18px;
-  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   cursor: pointer;
   transition: all 0.2s;
 }
-.btn-generate:hover { background: var(--red-dark); }
+.btn-generate:hover { background: var(--ihecs-dark); }
 .btn-generate:active { transform: scale(0.98); }
 .btn-generate:disabled {
   background: var(--muted2);
@@ -194,29 +199,28 @@ textarea::placeholder { color: var(--muted2); }
   display: none;
   text-align: center;
   padding: 48px 32px;
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  background: var(--surface);
+  border: 2px solid var(--ihecs);
+  border-radius: 4px;
+  background: linear-gradient(135deg, rgba(0,131,169,0.04), rgba(0,173,208,0.04));
   margin-bottom: 48px;
 }
 .result-section.visible { display: block; }
 
 .result-label {
   font-size: 12px;
-  color: var(--muted);
+  color: var(--muted2);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   margin-bottom: 20px;
 }
 
 .result-name {
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Fjalla One', sans-serif;
   font-size: 52px;
-  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   line-height: 1.1;
-  color: var(--red);
+  color: var(--ihecs);
   margin-bottom: 24px;
   animation: resultPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -237,26 +241,26 @@ textarea::placeholder { color: var(--muted2); }
 .btn-action {
   padding: 12px 28px;
   border: 1px solid var(--border);
-  border-radius: 2px;
+  border-radius: 4px;
   background: transparent;
   color: var(--text);
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Fjalla One', sans-serif;
   font-size: 14px;
-  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   cursor: pointer;
   transition: all 0.2s;
 }
-.btn-action:hover { border-color: var(--red); color: var(--red); }
+.btn-action:hover { border-color: var(--ihecs); color: var(--ihecs); }
 
 /* ── ALL NAMES LIST ── */
 .all-names {
   display: none;
   border: 1px solid var(--border);
-  border-radius: 3px;
+  border-radius: 4px;
   overflow: hidden;
   margin-bottom: 48px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 .all-names.visible { display: block; }
 
@@ -264,9 +268,8 @@ textarea::placeholder { color: var(--muted2); }
   background: var(--surface);
   padding: 14px 32px;
   border-bottom: 1px solid var(--border);
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Fjalla One', sans-serif;
   font-size: 14px;
-  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--muted);
@@ -280,27 +283,27 @@ textarea::placeholder { color: var(--muted2); }
 }
 
 .name-chip {
-  padding: 10px 16px;
-  background: var(--surface2);
+  padding: 12px 16px;
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 2px;
-  font-family: 'Barlow Condensed', sans-serif;
+  border-radius: 4px;
+  font-family: 'Fjalla One', sans-serif;
   font-size: 16px;
-  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   cursor: pointer;
   transition: all 0.2s;
   text-align: center;
 }
 .name-chip:hover {
-  border-color: var(--red);
-  color: var(--red);
+  border-color: var(--ihecs);
+  color: var(--ihecs);
+  background: rgba(0,131,169,0.04);
 }
 .name-chip.winner {
-  border-color: var(--red);
-  background: rgba(204,17,34,0.1);
-  color: var(--red);
+  border-color: var(--ihecs);
+  background: rgba(0,131,169,0.08);
+  color: var(--ihecs);
 }
 
 /* ── FOOTER ── */
@@ -312,7 +315,7 @@ textarea::placeholder { color: var(--muted2); }
   color: var(--muted2);
 }
 .footer a { color: var(--muted); text-decoration: none; }
-.footer a:hover { color: var(--red); }
+.footer a:hover { color: var(--ihecs); }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 600px) {
